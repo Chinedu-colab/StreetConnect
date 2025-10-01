@@ -1,0 +1,59 @@
+{# templates/macros.html #}
+
+{% macro render_field(field, placeholder='') %}
+  <div class="form-group">
+    {{ field.label }}
+    {{ field(class="form-control", placeholder=placeholder) }}
+    {% if field.errors %}
+      <ul class="errors">
+        {% for error in field.errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro render_flash_messages() %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+{% endmacro %}
+{% macro render_field(field, placeholder='') %}
+    <div class="form-group">
+        {{ field.label }}
+        {{ field(class="form-control", placeholder=placeholder) }}
+        {% if field.errors %}
+            <ul class="text-danger">
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endmacro %}
+jinja
+{% macro role_badge(role) %}
+    {% if role == 'admin' %}
+        <span class="badge bg-success">Admin</span>
+    {% elif role == 'banned' %}
+        <span class="badge bg-danger">Banned</span>
+    {% else %}
+        <span class="badge bg-secondary">User</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro action_button(url, label, btn_class='btn-primary', method='GET') %}
+    {% if method == 'POST' %}
+    <form method="POST" action="{{ url }}" style="display:inline;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-sm {{ btn_class }}">{{ label }}</button>
+    </form>
+    {% else %}
+        <a href="{{ url }}" class="btn btn-sm {{ btn_class }}">{{ label }}</a>
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StreetConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"> -->
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">StreetConnect</div>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/post">Post a Job</a></li>
+            {% if session.get('user') %}
+            <li><span>Welcome, {{ session.get('user') }}</span></li>
+            <li><a href="/logout">Logout</a></li>
+            {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Find or Post Local Jobs Easily</h1>
+            <p>No middleman. No wahala. Just straight connection.</p>
+            <a href="/post" class="btn">Post a Job</a>
+        </div>
+    </section>
+
+    <!-- Job Listings -->
+    <section class="job-list">
+        <div class="container">
+            <h2>Available Jobs Near You</h2>
+
+            <div class="search-bar">
+                <form method="GET">
+                    <select name="category" onchange="this.form.submit()">
+                        <option value="">-- All Categories --</option>
+                        {% for cat in [
+                        'Cleaning', 'Delivery', 'Catering', 'Mechanic', 'Tech Support',
+                        'Tutoring', 'Construction', 'Driving', 'Home Repair', 'Teaching',
+                        'Makeup art', 'DJ', 'Usher', 'Security', 'Fashion design',
+                        'Digital skills', 'Farming', 'Plumbering', 'Other'
+                        ] %}
+                        <option value="{{ cat }}" {% if selected_category==cat %}selected{% endif %}>
+                            {{ cat }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            <div class="job-cards">
+                {% if jobs %}
+                {% for job in jobs %}
+                <div class="job-card">
+                    <h3>{{ job.title }}</h3>
+                    <p><strong>Category:</strong> {{ job.category }}</p>
+                    <p>{{ job.description }}</p>
+                    <p><strong>📍:</strong> {{ job.location }}</p>
+                    <p><strong>Pay:</strong> {{ job.pay }}</p>
+                    <p><strong>Contact:</strong> {{ job.poster_name }} - {{ job.poster_contact }}</p>
+                    {% if session.get('user') %}
+                    <button
+                        onclick="alert('Contact {{ job.poster_name }} at {{ job.poster_contact }}')" class="btn-connect">Connect</button>
+                    {% else %}
+                    <button onclick="window.location.href='/login'">Login to Connect</button>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>No jobs posted yet. Be the first to <a href="/post">post one</a>!</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>StreetConnect &copy; 2025 — Built for the people, by the street. 💪</p>
+        </div>
+    </footer>
+</body>
+
+</html>

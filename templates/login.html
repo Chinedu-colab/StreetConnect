@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}StreetConnect | Login{% endblock %}
+{% from 'macros.html' import render_field %}
+
+{% block content %}
+<section class="form-section">
+    <h2>Login</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ render_field(form.username) }}
+        {{ render_field(form.password) }}
+        {{ form.submit(class="btn") }}
+    </form>
+</section>
+{% endblock %}

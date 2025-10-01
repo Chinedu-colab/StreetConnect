@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Post a Job - StreetConnect{% endblock %}
+{% import "macros.html" as macros %}
+
+{% block content %}
+<!-- 
+    <nav class="navbar">
+        <div class="logo">StreetConnect</div>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav> -->
+
+<div class="container">
+    <h2>Post a Job</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        {{ macros.render_field(form.title, 'Job Title') }}
+        {{ macros.render_field(form.description, 'Description') }}
+        {{ macros.render_field(form.location, 'Location') }}
+        {{ macros.render_field(form.pay, 'Pay') }}
+        {{ macros.render_field(form.category, 'Category') }}
+        {{ macros.render_field(form.poster_name, 'Your Name') }}
+        {{ macros.render_field(form.poster_contact, 'Your Contact') }}
+
+        {{ form.submit(class='btn btn-primary') }}
+    </form>
+</div>
+
+{% endblock %}

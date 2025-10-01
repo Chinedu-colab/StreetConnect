@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Edit Job | StreetConnect{% endblock %}
+{% from 'macros.html' import render_field %}
+
+{% block content %}
+<section class="form-section">
+    <h2>Edit Job</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ render_field(form.title) }}
+        {{ render_field(form.description) }}
+        {{ render_field(form.location) }}
+        {{ render_field(form.pay) }}
+        {{ render_field(form.category) }}
+        {{ render_field(form.poster_name) }}
+        {{ render_field(form.poster_contact) }}
+        {{ form.submit(class="btn") }}
+    </form>
+</section>
+{% endblock %}

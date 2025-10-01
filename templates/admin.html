@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block title %}Admin Dashboard - StreetConnect{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">👑 StreetConnect Admin Dashboard</h1>
+
+    <!-- Search Bar -->
+    <div class="mb-4">
+        <input type="text" class="form-control" placeholder="🔍 Search jobs or users..." id="searchInput">
+    </div>
+
+    <!-- Job Listings -->
+    <div class="card mb-5">
+        <div class="card-header bg-dark text-white">
+            Job Listings
+        </div>
+        <table class="table table-striped" style="border: 3px;">
+            <thead>
+                <tr>
+                    <th>Job Title</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Pay</th>
+                    <th>Category</th>
+                    <th>Poster Name</th>
+                    <th>Poster Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.title }}</td>
+                    <td>{{ job.description }}</td>
+                    <td>{{ job.location }}</td>
+                    <td>{{ job.pay }}</td>
+                    <td>{{ job.category }}</td>
+                    <td>{{ job.poster_name }}</td>
+                    <td>{{ job.poster_contact }}</td>
+                    <td>
+                        {{ macros.action_button(url_for('edit_job', job_id=job.id), 'Edit', 'btn-primary') }}
+                        {{ macros.action_button(url_for('delete_job', job_id=job.id), 'Delete', 'btn-danger', 'POST') }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- User Management -->
+    <div class="card">
+        <div class="adm-header">
+            User Management
+        </div>
+        <table class="hero" style="border-radius: 0.6rem;">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ macros.role_badge(user.role) }}</td>
+                    <td>
+                        {% if user.role != 'admin' %}
+                        {{ macros.action_button(url_for('promote_user', user_id=user.id), 'Promote', 'btn-success',
+                        'POST') }}
+                        {% endif %}
+                        {% if user.role == 'banned' %}
+                        {{ macros.action_button(url_for('unban_user', user_id=user.id), 'Unban', 'btn-secondary',
+                        'POST') }}
+                        {% elif user.role != 'admin' %}
+                        {{ macros.action_button(url_for('ban_user', user_id=user.id), 'Ban', 'btn-warning', 'POST') }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function () {
+        let filter = this.value.toLowerCase();
+        document.querySelectorAll('tbody tr').forEach(function (row) {
+            row.style.display = row.textContent.toLowerCase().includes(filter) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}
