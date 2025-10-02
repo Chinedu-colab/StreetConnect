@@ -5,5 +5,4 @@ Flask-Migrate
 python-dotenv
 email-validator
 WTForms
-os
 datetime
